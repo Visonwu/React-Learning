@@ -1,0 +1,119 @@
+React全家桶(技术栈)
+1.React主体
+2.webpack:grunt、gulp自动化构建工具
+3.Flex:布局
+4.React-Route：路由
+5.Redux:View层
+6.Mocha:测试
+7.Istanbul：覆盖率
+----------------------
+
+JSX：编辑器
+1.增强型的js语法---HTML代码直接放JS里
+2.babel专门编译JSX
+
+注意：
+1.有且只有一个父元素
+2.模板字符串
+---------
+
+React最强点：
+1.组件
+2.状态
+---------
+
+1.定义组件--class
+
+class 名字 extends React.Component{
+   render(){
+     return <span>222</span>
+  }
+}
+
+2.使用组件
+就跟标签一样,一下是渲染
+var oDiv = document.getElementById("div1");
+   ReactDOM.render(
+   <span>111</span>,
+   oDiv
+  );
+
+  或者
+  ReactDOM.render(
+   <Comp/>,
+   oDiv
+)
+
+<body>
+ <div id="div1"></div>
+</body>
+
+--------------
+1.属性---定死的
+2.状态-变的
+
+1.用了constructor必须用super
+constructor(...args){
+super（...args）;
+
+this.state={value:''};
+}
+
+render(){
+ return <div></div>
+}
+
+其他方法--this.setState({})
+2.时间大小写不能乱
+3.绑定事件
+onChange={this.fn.bind(this)}
+
+----------
+
+this.refs['s1']  获取有ref=‘s1’节点-------做成原生了的
+
+
+延迟加载
+---------
+
+
+表单
+----------
+表单默认值可以用 
+文本默认用这个否则定死了不能修改
+value  改成defaultValue={this.props.value}
+checked 改成defaultChecked
+
+事件
+----------
+1.冒泡事件
+ev.nativeEvent.stopImmediatePropagation()
+用这个方法关闭冒泡
+
+
+组件通信
+-------
+
+
+webPack
+--------
+package.json 里面是依赖包，有了依赖可以直接用cnpm install 全部安装
+
+
+
+环境变量
+---------
+环境变量必须以REACT_APP_开头  见官方文档
+引用用 process.env.REACT_APP_xxxxx  去引用环境变量（例如：REACT_APP_RECORDS_API_URL
+引用就用process.env.REACT_APP_RECORDS_API_URL  注意查看官方文档
+）
+
+下面运行时分别去找这几个文件，次序递减
+npm start : .env.development.local, .env.development, .env.local, .env
+npm run build : .env.production.local, .env.production, .env.local, .env
+
+
+配置了环境变量需要重启
+  
+（）在方法后面添加小括号表示方法执行
+
