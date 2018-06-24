@@ -1,0 +1,45 @@
+采用单页面-----只有一个html,由js控制不同的页面
+
+import {BrowserRouter,Route} from "react-router-dom"
+
+class App extens Component{
+   render(){
+     <Router>
+	<div>
+	  <Route exact path="/" component={Home}>
+	  <Route path="/contact" component={Contact}>
+	  <Route path="/about" component={About}>
+	</div>
+     </Router>
+  }
+}
+
+
+--------------
+关键字
+
+1.exact 加了这个，在访问其他路由页面时，exact修饰组件（包含这个路径的）的会消失，不然后面访问的组件是在这个后面添加
+
+
+2.如果地址中间要加一个#那么
+   把引入的BrowserRouter 改为HashRouter
+
+3.如果这些不同的路由组件需要相同的组件，分别放在
+	<Router>
+	 <div>
+	   <Navi>  //这里是导航栏，下面不同的路由都会显示
+	    <Route exact path="/" component={Home}>
+	    <Route path="/contact" component={Contact}>
+	    <Route path="/about" component={About}>
+	   <Footer> // 页脚，同理
+	 </div>
+       </Router>
+4：传递参数、Restful方式传递
+	xxxx/user/:id
+
+  this.props.match.params.id 可以获取路径的值
+
+5.怎么在组件中通过点击按钮跳转到另外一个页面(修改路由)
+ 
+  通过这个命令跳转
+  this.props.history.push("/")
