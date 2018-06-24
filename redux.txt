@@ -263,4 +263,5 @@ module.hot
 moment 库 用来改变日期的样式
 
 --------------------
-Cookie
+Cookie --------第三方sfcookies
+主要有三个方法保存/更新，读取，删除 bake_cookie,read_cookie,delete_cookie
