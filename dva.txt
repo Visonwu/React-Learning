@@ -1,0 +1,122 @@
+1.安装dva
+  npm install dva-cli -g
+  dva -v
+2.初始化一个dva项目
+  dva new dva-quickstart
+3.入口的index.js中
+  app.start(#root)---类似于之前的ReactDOM.render{
+    <App>,document.getElmentById("#root");
+  }
+
+
+
+-----------------------
+路由：BrowserHistory  和 HashHistory
+
+
+
+1.router.js和之前的router路由相同
+  app.router(require('./router').default) //这里的default表示调用方法，可以通过import这个路由，是相同的效果
+
+2.路径带#问题  他们都是单页面应用，通过js改变不同的内容
+ 2.1去掉路径中的#
+   2.1.1  npm install --save history
+   2.1.2  在入口的index.js中
+       import {createBrowserHistory as createHistory} from "history"
+       修改dva初始化类容
+       const app =dva({history:createHistory()});
+ 2.2 默认是带hashRouter  对浏览器不太好，需要用seo来抓取这个页面
+	
+   历史变化： # 锚点 最早通过#来实现单页面
+	      history最早是H5的history记录网页地址，后退前进一步 back(),forward()
+
+------------------
+
+UI Component:
+	和react的组件相同
+
+
+
+--------------
+Models  ---启用models 需要打开(入口index.js)中的 app.model(require('./models/counter').default);有多个model,多写几个app.model（）就可以
+
+这是一个对象
+ export default {
+    namespace:'counter'，   // 和当前model文件名相同就好之前的reducer名字相同，是全局state的属性，只能为字符串，不支持.的方式建立多重
+    state:{},		    // 是当前counter的state的初始值，优先级低于传给（入口index.js）dva()的opts.initialState	
+    subscriptons:{},
+    effects:{};
+    reducers:{}
+
+ }
+  
+
+-------------------
+connect		 Model数据和component
+
+
+1.在组件中引入import {connect} from "dva"
+
+2.同样和redux的connect使用方法相同
+  const mapStateToProps = (state)=>{
+    return({
+          counter:state.counter
+         }
+      )
+   }
+
+    export default connect(mapStateToProps)(CounterPage);
+
+结论：这样如果是一个class组件,可以通过this.props获取dispatch和counter等传过来的参数
+     如果是一个无状态的组件就可以通过传过来一个参数，相当于props,只是没有this修饰
+
+------------------
+
+
+action reducer 的组合写法
+在model中用reducers 属性
+
+
+
+当在组件中点击某一个按钮时触发 dispatch（{type:"counter/add"}）  这里的counter就是model中的namespace的值，add就是这个model中reducers的一个add方法 在dispatch中放入的对象是一个action,在model中的通过add方法是可以获取到这个数据，从而可以存储到store中去
+
+ reducers:{
+    add(state,action){   //这里的action就是组件dispatch的内容
+      return{
+        counter:state.counter+1,
+      }
+    }
+ }
+
+
+
+---------------------
+effects 处理异步动作
+
+在model中用effects 属性
+  dispatch({type:"counter/asyncAdd",payload:"wusu"}
+
+ effects:{
+    *asyncAdd({payload},{call,put,select}){   //这里的第一个payload就是dispatch中传的参数，如果没有用{}就是dispatch中的action值，可以获取传过来的参数，
+   后面的call就和redux-saga中的相同，call表示请求api,
+    put表示dispatch,可以调用reducer中的方法
+    select这里可以不写，这里可以获取state,例如
+     1.1 const counter = yield select(state => state.counter) 这里就可以获取到state中的counter值了，也可以写成
+     1.2 也可以const counter = yield select (({counter}) => counter)
+     1.3 也可以const counter = yield select(_ => _.counter)
+      console.log(payload)
+      yield put ({type:"save"});
+    }
+  },
+
+延迟加载可以从dva/saga获取delay,从而可以在effects中执行异步操作
+  import{delay} from "dva/saga"
+  yield call(delay,2000)
+
+
+-------------------
+index.js中怎么Model
+
+
+
+    
